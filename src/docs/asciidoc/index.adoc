@@ -1,0 +1,651 @@
+= JUG Munich - Gradle 5.0
+:title-slide-background-image: title.jpeg
+:title-slide-transition: zoom
+:title-slide-transition-speed: fast
+:revnumber: {project-version}
+ifndef::imagesdir[:imagesdir: images]
+ifndef::sourcedir[:sourcedir: ../java]
+:deckjs_transition: fade
+:navigation:
+:menu:
+:status:
+
+https://twitter.com/wolfs42[Stefan Wolf (@wolfs42)], Gradle
+
+== What is Gradle
+
+=== What is Gradle
+
+Gradle is a build and automation tool.
+
+* JVM based
+* Implemented in Java
+* 100% Free Open Source - Apache Standard License 2.0
+
+=== Agnostic Build System
+
+* Java ecosystem
+** Groovy, Kotlin, Scala, ...
+* Native ecosystem
+** C, C++, Swift, ...
+* Android
+* Misc
+** Go, Asciidoctor, ...
+
+=== Gradle in figures
+
+* > 6.0M downloads / month
+* https://techcrunch.com/2017/04/07/tracking-the-explosive-growth-of-open-source-software/[#17 OSS projects worldwide]
+* 35+ Gradle Engineers
+* 300K builds/week @ LinkedIn
+* New release about every 6 weeks
+
+=== Gradle Enterprise
+
+* Complementary to Gradle Build Tool
+* Give every developer back one hour a day
+* https://gradle.com/#play-video
+
+=== Gradle Enterprise
+
+* Speed up slow builds
+* Improve build reliability
+* Simplify build debugging
+* Build performance management
+
+=== Gradle Inc.
+
+The company behind Gradle.
+
+* Build Happiness
+* Employs full time engineers
+* Products
+** Gradle Build Tool
+** Gradle Enterprise
+
+=== Gradle is hiring!
+
+* Fully distributed development team
+* Exciting project used by millions
+* Build tool team and Gradle enterprise positions
+
+https://gradle.com/careers/
+
+== Developer productivity
+
+=== Influences on +++<br />+++ developer productivity
+
+[%step]
+* IDE
+* Languages and frameworks
+* Good hardware
+* Training
+* ...
+* Food in cafeteria
+
+=== Developer productivity
+
+* Fast feedback cycles
+* High degree of automation
+* Faster debugging
+
+=== Fast feedback cycles
+
+* Maximum build performance
+* Measure and optimize
+* Build reliability
+
+=== Maximum build performance
+
+> *Maximum build performance* is the maximum achievable performance of a build system *for your code base.*
+
+=== Test projects
+
+* Large monolithic: 1 prj, 50000 src
+* Small multiproject: 10 prj, 100 src/prj
+* Medium multiproject: 100 prj, 100 src/prj
+* Large multiproject: 500 prj, 100 src/prj
+
+[%notitle]
+=== Maven vs. Gradle
+image::incremental-build.png[background,size=70% 70%]
+
+=== Gradle is up to 100 times faster than Maven
+
+=== Gradle is up to 150 times faster than Maven
+
+=== How
+
+* Incremental compilation (Java)
+* Incremental builds
+* Compile avoidance (Java)
+* Build cache
+
+== Incremental compilation
+
+* Only compile the files that changed
+* and their dependencies...
+* Language specific
+* enabled by default since Gradle 4.10
+
+=== In practice
+
+[source,java]
+----
+import org.apache.commons.math3.complex.Complex;
+
+public class Library {
+    public Complex someLibraryMethod() {
+        return Complex.I;
+    }
+}
+----
+
+* `Complex` is a dependency of `Library`
+* if `Complex` is changed, we need to recompile `Library`
+* if `ComplexUtils` is changed, no need to recompile
+
+== Incremental builds
+
+[%notitle]
+=== Task inputs/outputs
+image::task_inputs_outputs.svg[width=380px, height=auto]
+
+=== Why does it matter?
+
+* Gradle is meant for incremental builds
+* `clean` is a waste of time
+
+=== In practice
+
+* https://e.grdev.net/scans/performance?list.offset=0&list.size=50&list.sortColumn=startTime&list.sortOrder=desc&performance.metric=avoidanceSavings&search.startTimeMax=1537692002824&search.startTimeMin=1537087202824&search.tags=local[Developer builds]
+
+=== The _incrementality_ test
+
+* Run a build
+* Run again with no change
+* If a task was re-executed, time is wasted
+* Investigate!
+
+=== Investigate
+
+* Build scan
+* `--info`
+
+== Compile avoidance
+
+=== Compile classpath
+
+What does a *compiler* care about?
+
+[%step]
+* Input: jars, or class directories
+* Jar: class files
+* Class file: both API and implementation
+
+=== Compile classpath
+
+What we provide to the compiler
+
+[source,java]
+----
+public class Foo {
+    private int x = 123;
+
+    public int getX() { return x; }
+    public int getSquaredX() { return x * x; }
+}
+----
+
+=== Compile classpath
+
+What the compiler cares about:
+
+[source,java]
+----
+public class Foo {
+    public int getX()
+    public int getSquaredX()
+}
+----
+
+=== Compile classpath
+
+But it could also be
+
+[source,java]
+----
+public class Foo {
+    public int getSquaredX()
+    public int getX()
+}
+----
+
+**only public signatures matter**
+
+=== Icing on the cake
+
+* Upgrade a dependency from `1.0.1` to `1.0.2`
+* If ABI hasn't changed, Gradle will _not_ recompile
+* Even if the name of the jar is different (`mydep-1.0.1.jar` vs `mydep-1.0.2.jar`)
+* Because only _contents_ matter
+
+== Build cache
+
+=== Incremental build
+
+Gradle is reusing results +
+from *last time*  +
+when we ran *this build* +
+ on *this machine*. +
+
+=== Gradle can do better
+
+=== Why not...
+
+Reuse results +
+from *anytime before*  +
+when we ran *any build* +
+ *anywhere*. +
+
+=== In practice
+
+[source,text]
+----
+$> gradle --build-cache assemble
+Build cache is an incubating feature.
+:compileJava FROM-CACHE
+:processResources
+:classes
+:jar
+:assemble
+
+BUILD SUCCESSFUL
+----
+
+=== In practice
+
+* https://e.grdev.net/scans/performance?list.offset=0&list.size=50&list.sortColumn=startTime&list.sortOrder=desc&performance.metric=avoidanceSavings&search.startTimeMax=1537692002824&search.startTimeMin=1537087202824&search.tags=Check[CI savings]
+
+=== The _cacheablility_ test
+
+* First: _incrementality_ test
+* `clean assemble`: all cacheable task from cache
+* `clean assemble` in other location
+* Investigate!
+
+=== Build cache
+
+* Stable for JVM, Android, C/C++ and Swift projects
+* Gradle Enterprise provides a backend for managing, monitoring and replicating caches
+* Dockerhub: https://hub.docker.com/r/gradle/build-cache-node/[gradle/build-cache-node]
+
+== Measure and optimize
+
+* Need data
+** CI server captures times
+** What about developer builds
+
+== Faster debugging
+
+* Build scans
+
+== High degree of automation
+
+* Kotlin DSL
+* Improved dependency management
+* Composite builds
+* Source dependencies
+
+== Kotlin DSL
+
+=== Motivation
+
+=== Current* limitations
+
+* DSL was not designed for performance
+* Tooling friendlyness
+* Reusing patterns and techniques from application development level
+
+=== Design Constraints
+
+* Preserve the use of 1500+ Gradle plugins
+* No magic: be transparent to tooling and users
+* Leverage idiomatic Kotlin
+* Ease of migration
+
+=== Features
+
+* First-class IDE support
+* Precompiled script plugins
+* Build cache support for script compilation
+
+=== Demo
+
+== Dependency management
+
+=== Why dependency management?
+
+=== Source vs published
+
+* Sources
+** (mostly) reliable
+** (often) slow
+** never touched
+** hard to version
+** safe
+
+=== Source vs published (2)
+
+* Binaries
+** Stable
+** Fast (pre-built)
+** Requires trusted sources
+** Not always metadata
+
+=== Consuming binaries
+
+* A `lib` directory
+* From a Maven repository
+** Maven Central (OSS libraries)
+** Private repositories (closed source, proxies)
+* From an Ivy repository
+** Artifactory, ...
+* From a custom repository
+** JitPack, ...
+
+=== Lib directory
+
+* Straightforward
+* No dependency management at all
+* Binaries in SCM
+
+=== Maven/Ivy repository
+
+* GAV coordinates
+* transitive dependencies management
+* metadata format restricts what you can do
+
+=== Custom repositories
+
+* Not portable
+* Hard to consume transitively
+
+=== Maven != Maven Central
+
+* Maven: a build tool
+* Maven **repository**: a place where you can find binaries
+
+=== What if there's no repository?
+
+* Coming soon: *source dependencies*
+
+[source,groovy]
+----
+sourceControl {
+   vcsMappings {
+      gitRepository("git@github.com:orgtest/greeter.git") {
+          produceModule("org.test:greeter")
+      }
+   }
+}
+----
+
+=== Managing dependencies
+
+=== Typical Maven dependency
+
+[source,xml]
+----
+<dependencies>
+   <groupId>org.apache.commons</groupId>
+   <artifactId>commons-lang3</artifactId>
+   <version>3.7</version>
+   <scope>compile</scope>
+</dependencies>
+----
+
+=== Using Gradle
+
+[source,groovy]
+----
+dependencies {
+   // An API dependency is used in public APIS
+   api 'org.apache.commons:commons-lang3:3.7'
+
+   // or...
+   // An implementation dependency is used in internals
+   implementation 'org.apache.commons:commons-lang3:3.7'
+}
+----
+
+=== API vs implementation
+
+* To _build_ a library, you need:
+** API+implementation dependencies
+* To _compile_ against a library, you need:
+** API dependencies
+* To _run_, you need:
+** API+implementation+runtime only dependencies
+
+=== Corollary
+
+All libraries published using Maven do it wrong
+
+=== Published metadata
+
+* Should be aimed at _consumers_
+* It doesn't matter what you need to compile
+* It matters what the _consumers_ need
+* Published POM should be != producer POM
+
+=== What Gradle does
+
+* Since 3.4, use the `java-library` plugin
+* Maps to `compile` and `runtime` scopes in `pom.xml`
+* But it's not enough...
+
+=== Gradle module metadata
+
+* Aimed at modeling properly _variants_ of modules
+* Death to classifiers (mostly)
+* Model different set of dependencies
+* Multi-ecosystem (Java, Native, ...)
+
+=== Gradle metadata format
+
+See link:sample-module.json[sample]
+
+=== Consequence
+
+* `all`/`fat` jars published with correct dependencies
+* `guava-jdk5`, `guava-jdk7`, ... no longer need to be classifiers
+* attributes for matching variants
+
+=== Rich version constraints
+
+=== Meaning of versions
+
+* What does it mean to say: "I depend on 1.1"
+* Does it mean it doesn't work using 1.0?
+* Implicit statement: "I should work with 1.1+"
+* What if it's not true?
+
+=== Meaning of versions
+
+* Use `latest.release`?
+* Dependency on `1.2-beta-3`: is `beta` important?
+* Dependency on snapshots...
+
+=== Custom dependency reasons
+
+* Explain _why_ a dependency is here
+
+[source,groovy]
+----
+dependencies {
+   implementation('com.google.guava:guava') {
+      version { prefer '23' }
+      because 'required for immutable collections'
+   }
+}
+----
+
+=== Custom dependency reasons
+
+* Shown in dependency insight (soon in build scans)
+
+`gradle dependencyInsight --configuration compileClasspath --dependency guava`
+
+[source,text]
+----
+org:foo:com.google.guava:guava:23 (required for immutable collections)
+   variant "default" [
+      Requested attributes not found in the selected variant:
+         org.gradle.usage = java-api
+   ]
+----
+
+=== Strict versions
+
+* Dependency should be **exactly** this version, or _fail_
+
+[source,groovy]
+----
+dependencies {
+   api('com.acme:foo') {
+      version {
+         strictly '1.1'
+      }
+      because "Only version approved by QA"
+   }
+}
+----
+
+=== Rejected versions
+
+* Dependency should be **exactly** this version, or _fail_
+
+[source,groovy]
+----
+dependencies {
+   api('com.acme:foo') {
+      version {
+         prefer '[1.0, 2.0)'
+         reject '1.1'
+      }
+      because "Version 1.1 has a vulnerability"
+   }
+}
+----
+
+=== Dependency constraints
+
+=== Concept
+
+* Influence versions found in the graph, without adding hard dependencies
+* "If you use this module, use this version"
+
+=== dependencyManagement
+
+Similar to Maven's `<dependencyManagement>` block but:
+
+* enforced transitively
+* published
+* consistent behavior
+
+=== Example 1: dependency version suggestion
+
+[source,groovy]
+----
+dependencies {
+    constraints {
+       api 'com.acme:foo:1.0'
+    }
+
+    // no need to put a version number
+    api 'com.acme:foo'
+}
+----
+
+=== Example 2: influence transitive dependency version
+
+[source,groovy]
+----
+dependencies {
+    constraints {
+       // if 'bar' found transitively, use 1.1
+       api 'com.acme:bar:1.1'
+    }
+    // ...
+}
+----
+
+=== Platform vs library
+
+* Platforms define things that "work together"
+* Suggests versions, not hard dependencies
+* Consumers _depend on_ a platform for suggestions
+
+Example: Spring Boot BOM
+
+=== Constraints as platforms
+
+[source,groovy]
+----
+apply plugin: 'platform'
+
+dependencies {
+   constraints {
+       platform 'org.springframework.boot:spring-boot:1.5.8-RELEASE'
+       platform 'org.springframework.boot:spring-boot-test-autoconfigure:1.5.8-RELEASE'
+       // ...
+   }
+}
+----
+
+=== Constraints publication
+
+* Published as constraints in Gradle metadata
+* Published as `<dependencyManagement>` in `pom.xml` (best effort)
+
+=== Component metadata rules: example 1
+
+* Downgrading a dependency
+
+[source,kotlin]
+----
+withModule(module) {
+   allVariants {
+      withDependencyConstraints {
+         filter { it.group == "org.apache.ivy" }.forEach {
+            version { prefer("2.2.0") }
+            because("Gradle depends on ivy implementation details which changed with newer versions")
+         }
+      }
+   }
+}
+----
+
+=== Component metadata rules: example 2
+
+* Remove a dependency
+
+[source,kotlin]
+----
+withModule("org.eclipse.jgit:org.eclipse.jgit") {
+   allVariants {
+      withDependencies {
+         removeAll { it.group == "com.googlecode.javaewah" }
+      }
+   }
+}
+----
+
+== Thank you
+
+* Slides: https://wolfs.github.io/jugm-2018[wolfs.github.io/jugm-2018]
+* Webinars
+* Youtube channel: https://www.youtube.com/channel/UCvClhveoEjokKIuBAsSjEwQ/videos[]
+* Blog: https://gradle.org/blog[]
+* Gradle Enterprise: https://gradle.com[]
