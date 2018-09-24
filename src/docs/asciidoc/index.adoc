@@ -12,6 +12,23 @@ ifndef::sourcedir[:sourcedir: ../java]
 
 https://twitter.com/wolfs42[Stefan Wolf (@wolfs42)], Gradle
 
+== Who am I
+
+[source,groovy]
+----
+speaker {
+    name 'Stefan Wolf'
+    company 'Gradle Inc'
+    title 'Senior Software Engineer'
+    past [
+        'TNG Technology Consulting',
+        'Jenkins Committer'
+    ],
+    twitter '@wolfs42',
+    github 'wolfs'
+}
+----
+
 == What is Gradle
 
 === What is Gradle
@@ -20,7 +37,7 @@ Gradle is a build and automation tool.
 
 * JVM based
 * Implemented in Java
-* 100% Free Open Source - Apache Standard License 2.0
+* 100% Free Open Source - Apache License 2.0
 
 === Agnostic Build System
 
@@ -86,8 +103,8 @@ https://gradle.com/careers/
 === Developer productivity
 
 * Fast feedback cycles
-* High degree of automation
 * Faster debugging
+* High degree of automation
 
 === Fast feedback cycles
 
@@ -147,14 +164,14 @@ public class Library {
 
 == Incremental builds
 
-[%notitle]
-=== Task inputs/outputs
-image::task_inputs_outputs.svg[width=380px, height=auto]
-
 === Why does it matter?
 
 * Gradle is meant for incremental builds
 * `clean` is a waste of time
+
+[%notitle]
+=== Task inputs/outputs
+image::task_inputs_outputs.svg[width=380px, height=auto]
 
 === In practice
 
@@ -169,7 +186,7 @@ image::task_inputs_outputs.svg[width=380px, height=auto]
 
 === Investigate
 
-* Build scan
+* https://e.grdev.net/s/wfn3yv5s4zihm/timeline?task=qgktl2jdzi6ja[Build scan]
 * `--info`
 
 == Compile avoidance
@@ -272,7 +289,7 @@ BUILD SUCCESSFUL
 * First: _incrementality_ test
 * `clean assemble`: all cacheable task from cache
 * `clean assemble` in other location
-* Investigate!
+* https://e.grdev.net/c/okf5lzs3mcu72/aezckc5xuhkk4/task-inputs?toggled=WzNd[Investigate!]
 
 === Build cache
 
@@ -285,10 +302,11 @@ BUILD SUCCESSFUL
 * Need data
 ** CI server captures times
 ** What about developer builds
+** https://e.grdev.net/scans?list.offset=0&list.size=50&list.sortColumn=startTime&list.sortOrder=desc&search.buildOutcome=success&search.rootProjectName=gradle&search.startTimeMax=1537738791218&search.startTimeMin=1537133991218&search.tags=local&search.tasks=clean[Build scans!]
 
 == Faster debugging
 
-* Build scans
+* https://e.grdev.net/s/cpzmbtjgfo7sk/console-log?task=:performance:k9AndroidBuild#L4[Build scans]
 
 == High degree of automation
 
@@ -321,6 +339,11 @@ BUILD SUCCESSFUL
 * Build cache support for script compilation
 
 === Demo
+
+=== Timeline
+
+* 1.0 release with Gradle 5.0
+* https://docs.gradle.org/nightly/userguide/build_cache.html#enable_caching_of_non_cacheable_tasks[User guide has been updated]
 
 == Dependency management
 
@@ -378,16 +401,16 @@ BUILD SUCCESSFUL
 
 === What if there's no repository?
 
-* Coming soon: *source dependencies*
+* Source dependencies
 
 [source,groovy]
 ----
 sourceControl {
-   vcsMappings {
-      gitRepository("git@github.com:orgtest/greeter.git") {
-          produceModule("org.test:greeter")
-      }
-   }
+  vcsMappings {
+    gitRepository("git@github.com:orgtst/greeter.git") {
+      produceModule("org.test:greeter")
+    }
+  }
 }
 ----
 
@@ -411,11 +434,11 @@ sourceControl {
 ----
 dependencies {
    // An API dependency is used in public APIS
-   api 'org.apache.commons:commons-lang3:3.7'
+   api("org.apache.commons:commons-lang3:3.7")
 
    // or...
    // An implementation dependency is used in internals
-   implementation 'org.apache.commons:commons-lang3:3.7'
+   implementation("org.apache.commons:commons-lang3:3.7")
 }
 ----
 
@@ -452,10 +475,6 @@ All libraries published using Maven do it wrong
 * Model different set of dependencies
 * Multi-ecosystem (Java, Native, ...)
 
-=== Gradle metadata format
-
-See link:sample-module.json[sample]
-
 === Consequence
 
 * `all`/`fat` jars published with correct dependencies
@@ -484,9 +503,9 @@ See link:sample-module.json[sample]
 [source,groovy]
 ----
 dependencies {
-   implementation('com.google.guava:guava') {
-      version { prefer '23' }
-      because 'required for immutable collections'
+   implementation("com.google.guava:guava") {
+      version { prefer "23" }
+      because "required for immutable collections"
    }
 }
 ----
@@ -524,7 +543,7 @@ dependencies {
 
 === Rejected versions
 
-* Dependency should be **exactly** this version, or _fail_
+* Dependency must not be **exactly** this version, or _fail_
 
 [source,groovy]
 ----
@@ -581,29 +600,6 @@ dependencies {
 }
 ----
 
-=== Platform vs library
-
-* Platforms define things that "work together"
-* Suggests versions, not hard dependencies
-* Consumers _depend on_ a platform for suggestions
-
-Example: Spring Boot BOM
-
-=== Constraints as platforms
-
-[source,groovy]
-----
-apply plugin: 'platform'
-
-dependencies {
-   constraints {
-       platform 'org.springframework.boot:spring-boot:1.5.8-RELEASE'
-       platform 'org.springframework.boot:spring-boot-test-autoconfigure:1.5.8-RELEASE'
-       // ...
-   }
-}
-----
-
 === Constraints publication
 
 * Published as constraints in Gradle metadata
@@ -642,10 +638,16 @@ withModule("org.eclipse.jgit:org.eclipse.jgit") {
 }
 ----
 
+=== Further features
+
+* Dependency locking
+* Support for platforms
+* BOM support
+
 == Thank you
 
 * Slides: https://wolfs.github.io/jugm-2018[wolfs.github.io/jugm-2018]
 * Webinars
-* Youtube channel: https://www.youtube.com/channel/UCvClhveoEjokKIuBAsSjEwQ/videos[]
+* https://www.youtube.com/channel/UCvClhveoEjokKIuBAsSjEwQ/videos[Youtube channel]
 * Blog: https://gradle.org/blog[]
 * Gradle Enterprise: https://gradle.com[]
