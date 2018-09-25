@@ -29,6 +29,12 @@ speaker {
 }
 ----
 
+== Who are you
+
+* Use Gradle at work
+* Tried Gradle
+* Heard about Gradle
+
 == What is Gradle
 
 === What is Gradle
