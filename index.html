@@ -1,0 +1,226 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8" /><title>JUG Munich - Gradle 5.0</title><meta content="yes" name="apple-mobile-web-app-capable" /><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style" /><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" name="viewport" /><link href="reveal.js/css/reveal.css" rel="stylesheet" /><link rel="stylesheet" href="reveal.js/css/theme/gradle.css" id="theme" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" /><link href="reveal.js/lib/css/zenburn.css" rel="stylesheet" /><script>document.write( '<link rel="stylesheet" href="reveal.js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );</script></head><body><div class="reveal"><div class="slides"><section class="title" data-state="title" data-transition="zoom" data-transition-speed="fast" data-background-image="./images/title.jpeg"><h1>JUG Munich - Gradle 5.0</h1><div class="preamble"><div class="paragraph"><p><a href="https://twitter.com/wolfs42">Stefan Wolf (@wolfs42)</a>, Gradle</p></div></div></section>
+<section id="who-am-i"><h2>Who am I</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="groovy language-groovy">speaker {
+    name 'Stefan Wolf'
+    company 'Gradle Inc'
+    title 'Senior Software Engineer'
+    past [
+        'TNG Technology Consulting',
+        'Jenkins Committer'
+    ],
+    twitter '@wolfs42',
+    github 'wolfs'
+}</code></pre></div></div></section>
+<section id="who-are-you"><h2>Who are you</h2><div class="ulist"><ul><li><p>Use Gradle at work</p></li><li><p>Tried Gradle</p></li><li><p>Heard about Gradle</p></li></ul></div></section>
+<section><section id="what-is-gradle"><h2>What is Gradle</h2></section><section id="what-is-gradle-2"><h2>What is Gradle</h2><div class="paragraph"><p>Gradle is a build and automation tool.</p></div>
+<div class="ulist"><ul><li><p>JVM based</p></li><li><p>Implemented in Java</p></li><li><p>100% Free Open Source - Apache License 2.0</p></li></ul></div></section><section id="agnostic-build-system"><h2>Agnostic Build System</h2><div class="ulist"><ul><li><p>Java ecosystem</p><div class="ulist"><ul><li><p>Groovy, Kotlin, Scala, &#8230;&#8203;</p></li></ul></div></li><li><p>Native ecosystem</p><div class="ulist"><ul><li><p>C, C++, Swift, &#8230;&#8203;</p></li></ul></div></li><li><p>Android</p></li><li><p>Misc</p><div class="ulist"><ul><li><p>Go, Asciidoctor, &#8230;&#8203;</p></li></ul></div></li></ul></div></section><section id="gradle-in-figures"><h2>Gradle in figures</h2><div class="ulist"><ul><li><p>&gt; 6.0M downloads / month</p></li><li><p><a href="https://techcrunch.com/2017/04/07/tracking-the-explosive-growth-of-open-source-software/">#17 OSS projects worldwide</a></p></li><li><p>35+ Gradle Engineers</p></li><li><p>300K builds/week @ LinkedIn</p></li><li><p>New release about every 6 weeks</p></li></ul></div></section><section id="gradle-enterprise"><h2>Gradle Enterprise</h2><div class="ulist"><ul><li><p>Complementary to Gradle Build Tool</p></li><li><p>Give every developer back one hour a day</p></li><li><p><a href="https://gradle.com/#play-video" class="bare">https://gradle.com/#play-video</a></p></li></ul></div></section><section id="gradle-enterprise-2"><h2>Gradle Enterprise</h2><div class="ulist"><ul><li><p>Speed up slow builds</p></li><li><p>Improve build reliability</p></li><li><p>Simplify build debugging</p></li><li><p>Build performance management</p></li></ul></div></section><section id="gradle-inc"><h2>Gradle Inc.</h2><div class="paragraph"><p>The company behind Gradle.</p></div>
+<div class="ulist"><ul><li><p>Build Happiness</p></li><li><p>Employs full time engineers</p></li><li><p>Products</p><div class="ulist"><ul><li><p>Gradle Build Tool</p></li><li><p>Gradle Enterprise</p></li></ul></div></li></ul></div></section><section id="gradle-is-hiring"><h2>Gradle is hiring!</h2><div class="ulist"><ul><li><p>Fully distributed development team</p></li><li><p>Exciting project used by millions</p></li><li><p>Build tool team and Gradle enterprise positions</p></li></ul></div>
+<div class="paragraph"><p><a href="https://gradle.com/careers/" class="bare">https://gradle.com/careers/</a></p></div></section></section>
+<section><section id="developer-productivity"><h2>Developer productivity</h2></section><section id="influences-on-br-developer-productivity"><h2>Influences on <br /> developer productivity</h2><div class="ulist"><ul><li class="fragment"><p>IDE</p></li><li class="fragment"><p>Languages and frameworks</p></li><li class="fragment"><p>Good hardware</p></li><li class="fragment"><p>Training</p></li><li class="fragment"><p>&#8230;&#8203;</p></li><li class="fragment"><p>Food in cafeteria</p></li></ul></div></section><section id="developer-productivity-2"><h2>Developer productivity</h2><div class="ulist"><ul><li><p>Fast feedback cycles</p></li><li><p>Faster debugging</p></li><li><p>High degree of automation</p></li></ul></div></section><section id="fast-feedback-cycles"><h2>Fast feedback cycles</h2><div class="ulist"><ul><li><p>Maximum build performance</p></li><li><p>Measure and optimize</p></li><li><p>Build reliability</p></li></ul></div></section><section id="maximum-build-performance"><h2>Maximum build performance</h2><div class="quoteblock"><blockquote><div class="paragraph"><p><strong>Maximum build performance</strong> is the maximum achievable performance of a build system <strong>for your code base.</strong></p></div></blockquote></div></section><section id="test-projects"><h2>Test projects</h2><div class="ulist"><ul><li><p>Large monolithic: 1 prj, 50000 src</p></li><li><p>Small multiproject: 10 prj, 100 src/prj</p></li><li><p>Medium multiproject: 100 prj, 100 src/prj</p></li><li><p>Large multiproject: 500 prj, 100 src/prj</p></li></ul></div></section><section id="maven-vs-gradle" data-background-image="./images/incremental-build.png" data-background-size="70% 70%"></section><section id="gradle-is-up-to-100-times-faster-than-maven"><h2>Gradle is up to 100 times faster than Maven</h2></section><section id="gradle-is-up-to-150-times-faster-than-maven"><h2>Gradle is up to 150 times faster than Maven</h2></section><section id="how"><h2>How</h2><div class="ulist"><ul><li><p>Incremental compilation (Java)</p></li><li><p>Incremental builds</p></li><li><p>Compile avoidance (Java)</p></li><li><p>Build cache</p></li></ul></div></section></section>
+<section><section id="incremental-compilation"><h2>Incremental compilation</h2><div class="ulist"><ul><li><p>Only compile the files that changed</p></li><li><p>and their dependencies&#8230;&#8203;</p></li><li><p>Language specific</p></li><li><p>enabled by default since Gradle 4.10</p></li></ul></div></section><section id="in-practice"><h2>In practice</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">import org.apache.commons.math3.complex.Complex;
+
+public class Library {
+    public Complex someLibraryMethod() {
+        return Complex.I;
+    }
+}</code></pre></div></div>
+<div class="ulist"><ul><li><p><code>Complex</code> is a dependency of <code>Library</code></p></li><li><p>if <code>Complex</code> is changed, we need to recompile <code>Library</code></p></li><li><p>if <code>ComplexUtils</code> is changed, no need to recompile</p></li></ul></div></section></section>
+<section><section id="incremental-builds"><h2>Incremental builds</h2></section><section id="why-does-it-matter"><h2>Why does it matter?</h2><div class="ulist"><ul><li><p>Gradle is meant for incremental builds</p></li><li><p><code>clean</code> is a waste of time</p></li></ul></div></section><section id="task-inputs-outputs"><div class="imageblock" style=""><img src="./images/task_inputs_outputs.svg" alt="task inputs outputs" width="380px" height="auto" /></div></section><section id="in-practice-2"><h2>In practice</h2><div class="ulist"><ul><li><p><a href="https://e.grdev.net/scans/performance?list.offset=0&amp;list.size=50&amp;list.sortColumn=startTime&amp;list.sortOrder=desc&amp;performance.metric=avoidanceSavings&amp;search.startTimeMax=1537692002824&amp;search.startTimeMin=1537087202824&amp;search.tags=local">Developer builds</a></p></li></ul></div></section><section id="the-em-incrementality-em-test"><h2>The <em>incrementality</em> test</h2><div class="ulist"><ul><li><p>Run a build</p></li><li><p>Run again with no change</p></li><li><p>If a task was re-executed, time is wasted</p></li><li><p>Investigate!</p></li></ul></div></section><section id="investigate"><h2>Investigate</h2><div class="ulist"><ul><li><p><a href="https://e.grdev.net/s/wfn3yv5s4zihm/timeline?task=qgktl2jdzi6ja">Build scan</a></p></li><li><p><code>--info</code></p></li></ul></div></section></section>
+<section><section id="compile-avoidance"><h2>Compile avoidance</h2></section><section id="compile-classpath"><h2>Compile classpath</h2><div class="paragraph"><p>What does a <strong>compiler</strong> care about?</p></div>
+<div class="ulist"><ul><li class="fragment"><p>Input: jars, or class directories</p></li><li class="fragment"><p>Jar: class files</p></li><li class="fragment"><p>Class file: both API and implementation</p></li></ul></div></section><section id="compile-classpath-2"><h2>Compile classpath</h2><div class="paragraph"><p>What we provide to the compiler</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">public class Foo {
+    private int x = 123;
+
+    public int getX() { return x; }
+    public int getSquaredX() { return x * x; }
+}</code></pre></div></div></section><section id="compile-classpath-3"><h2>Compile classpath</h2><div class="paragraph"><p>What the compiler cares about:</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">public class Foo {
+    public int getX()
+    public int getSquaredX()
+}</code></pre></div></div></section><section id="compile-classpath-4"><h2>Compile classpath</h2><div class="paragraph"><p>But it could also be</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">public class Foo {
+    public int getSquaredX()
+    public int getX()
+}</code></pre></div></div>
+<div class="paragraph"><p><strong>only public signatures matter</strong></p></div></section><section id="icing-on-the-cake"><h2>Icing on the cake</h2><div class="ulist"><ul><li><p>Upgrade a dependency from <code>1.0.1</code> to <code>1.0.2</code></p></li><li><p>If ABI hasn&#8217;t changed, Gradle will <em>not</em> recompile</p></li><li><p>Even if the name of the jar is different (<code>mydep-1.0.1.jar</code> vs <code>mydep-1.0.2.jar</code>)</p></li><li><p>Because only <em>contents</em> matter</p></li></ul></div></section></section>
+<section><section id="build-cache"><h2>Build cache</h2></section><section id="incremental-build"><h2>Incremental build</h2><div class="paragraph"><p>Gradle is reusing results<br />
+from <strong>last time</strong> <br />
+when we ran <strong>this build</strong><br />
+ on <strong>this machine</strong>.<br /></p></div></section><section id="gradle-can-do-better"><h2>Gradle can do better</h2></section><section id="why-not"><h2>Why not&#8230;&#8203;</h2><div class="paragraph"><p>Reuse results<br />
+from <strong>anytime before</strong> <br />
+when we ran <strong>any build</strong><br />
+ <strong>anywhere</strong>.<br /></p></div></section><section id="in-practice-3"><h2>In practice</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="text language-text">$&gt; gradle --build-cache assemble
+Build cache is an incubating feature.
+:compileJava FROM-CACHE
+:processResources
+:classes
+:jar
+:assemble
+
+BUILD SUCCESSFUL</code></pre></div></div></section><section id="in-practice-4"><h2>In practice</h2><div class="ulist"><ul><li><p><a href="https://e.grdev.net/scans/performance?list.offset=0&amp;list.size=50&amp;list.sortColumn=startTime&amp;list.sortOrder=desc&amp;performance.metric=avoidanceSavings&amp;search.startTimeMax=1537692002824&amp;search.startTimeMin=1537087202824&amp;search.tags=Check">CI savings</a></p></li></ul></div></section><section id="the-em-cacheablility-em-test"><h2>The <em>cacheablility</em> test</h2><div class="ulist"><ul><li><p>First: <em>incrementality</em> test</p></li><li><p><code>clean assemble</code>: all cacheable task from cache</p></li><li><p><code>clean assemble</code> in other location</p></li><li><p><a href="https://e.grdev.net/c/okf5lzs3mcu72/aezckc5xuhkk4/task-inputs?toggled=WzNd">Investigate!</a></p></li></ul></div></section><section id="build-cache-2"><h2>Build cache</h2><div class="ulist"><ul><li><p>Stable for JVM, Android, C/C++ and Swift projects</p></li><li><p>Gradle Enterprise provides a backend for managing, monitoring and replicating caches</p></li><li><p>Dockerhub: <a href="https://hub.docker.com/r/gradle/build-cache-node/">gradle/build-cache-node</a></p></li></ul></div></section></section>
+<section id="measure-and-optimize"><h2>Measure and optimize</h2><div class="ulist"><ul><li><p>Need data</p><div class="ulist"><ul><li><p>CI server captures times</p></li><li><p>What about developer builds</p></li><li><p><a href="https://e.grdev.net/scans?list.offset=0&amp;list.size=50&amp;list.sortColumn=startTime&amp;list.sortOrder=desc&amp;search.buildOutcome=success&amp;search.rootProjectName=gradle&amp;search.startTimeMax=1537738791218&amp;search.startTimeMin=1537133991218&amp;search.tags=local&amp;search.tasks=clean">Build scans!</a></p></li></ul></div></li></ul></div></section>
+<section id="faster-debugging"><h2>Faster debugging</h2><div class="ulist"><ul><li><p><a href="https://e.grdev.net/s/cpzmbtjgfo7sk/console-log?task=:performance:k9AndroidBuild#L4">Build scans</a></p></li></ul></div></section>
+<section id="high-degree-of-automation"><h2>High degree of automation</h2><div class="ulist"><ul><li><p>Kotlin DSL</p></li><li><p>Improved dependency management</p></li><li><p>Composite builds</p></li><li><p>Source dependencies</p></li></ul></div></section>
+<section><section id="kotlin-dsl"><h2>Kotlin DSL</h2></section><section id="motivation"><h2>Motivation</h2></section><section id="current-limitations"><h2>Current* limitations</h2><div class="ulist"><ul><li><p>DSL was not designed for performance</p></li><li><p>Tooling friendlyness</p></li><li><p>Reusing patterns and techniques from application development level</p></li></ul></div></section><section id="design-constraints"><h2>Design Constraints</h2><div class="ulist"><ul><li><p>Preserve the use of 1500+ Gradle plugins</p></li><li><p>No magic: be transparent to tooling and users</p></li><li><p>Leverage idiomatic Kotlin</p></li><li><p>Ease of migration</p></li></ul></div></section><section id="features"><h2>Features</h2><div class="ulist"><ul><li><p>First-class IDE support</p></li><li><p>Precompiled script plugins</p></li><li><p>Build cache support for script compilation</p></li></ul></div></section><section id="demo"><h2>Demo</h2></section><section id="timeline"><h2>Timeline</h2><div class="ulist"><ul><li><p>1.0 release with Gradle 5.0</p></li><li><p><a href="https://docs.gradle.org/nightly/userguide/build_cache.html#enable_caching_of_non_cacheable_tasks">User guide has been updated</a></p></li></ul></div></section></section>
+<section><section id="dependency-management"><h2>Dependency management</h2></section><section id="why-dependency-management"><h2>Why dependency management?</h2></section><section id="source-vs-published"><h2>Source vs published</h2><div class="ulist"><ul><li><p>Sources</p><div class="ulist"><ul><li><p>(mostly) reliable</p></li><li><p>(often) slow</p></li><li><p>never touched</p></li><li><p>hard to version</p></li><li><p>safe</p></li></ul></div></li></ul></div></section><section id="source-vs-published-2"><h2>Source vs published (2)</h2><div class="ulist"><ul><li><p>Binaries</p><div class="ulist"><ul><li><p>Stable</p></li><li><p>Fast (pre-built)</p></li><li><p>Requires trusted sources</p></li><li><p>Not always metadata</p></li></ul></div></li></ul></div></section><section id="consuming-binaries"><h2>Consuming binaries</h2><div class="ulist"><ul><li><p>A <code>lib</code> directory</p></li><li><p>From a Maven repository</p><div class="ulist"><ul><li><p>Maven Central (OSS libraries)</p></li><li><p>Private repositories (closed source, proxies)</p></li></ul></div></li><li><p>From an Ivy repository</p><div class="ulist"><ul><li><p>Artifactory, &#8230;&#8203;</p></li></ul></div></li><li><p>From a custom repository</p><div class="ulist"><ul><li><p>JitPack, &#8230;&#8203;</p></li></ul></div></li></ul></div></section><section id="lib-directory"><h2>Lib directory</h2><div class="ulist"><ul><li><p>Straightforward</p></li><li><p>No dependency management at all</p></li><li><p>Binaries in SCM</p></li></ul></div></section><section id="maven-ivy-repository"><h2>Maven/Ivy repository</h2><div class="ulist"><ul><li><p>GAV coordinates</p></li><li><p>transitive dependencies management</p></li><li><p>metadata format restricts what you can do</p></li></ul></div></section><section id="custom-repositories"><h2>Custom repositories</h2><div class="ulist"><ul><li><p>Not portable</p></li><li><p>Hard to consume transitively</p></li></ul></div></section><section id="maven-maven-central"><h2>Maven != Maven Central</h2><div class="ulist"><ul><li><p>Maven: a build tool</p></li><li><p>Maven <strong>repository</strong>: a place where you can find binaries</p></li></ul></div></section><section id="what-if-there-s-no-repository"><h2>What if there&#8217;s no repository?</h2><div class="ulist"><ul><li><p>Source dependencies</p></li></ul></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="groovy language-groovy">sourceControl {
+  vcsMappings {
+    gitRepository("git@github.com:orgtst/greeter.git") {
+      produceModule("org.test:greeter")
+    }
+  }
+}</code></pre></div></div></section><section id="managing-dependencies"><h2>Managing dependencies</h2></section><section id="typical-maven-dependency"><h2>Typical Maven dependency</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="xml language-xml">&lt;dependencies&gt;
+   &lt;groupId&gt;org.apache.commons&lt;/groupId&gt;
+   &lt;artifactId&gt;commons-lang3&lt;/artifactId&gt;
+   &lt;version&gt;3.7&lt;/version&gt;
+   &lt;scope&gt;compile&lt;/scope&gt;
+&lt;/dependencies&gt;</code></pre></div></div></section><section id="using-gradle"><h2>Using Gradle</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="groovy language-groovy">dependencies {
+   // An API dependency is used in public APIS
+   api("org.apache.commons:commons-lang3:3.7")
+
+   // or...
+   // An implementation dependency is used in internals
+   implementation("org.apache.commons:commons-lang3:3.7")
+}</code></pre></div></div></section><section id="api-vs-implementation"><h2>API vs implementation</h2><div class="ulist"><ul><li><p>To <em>build</em> a library, you need:</p><div class="ulist"><ul><li><p>API+implementation dependencies</p></li></ul></div></li><li><p>To <em>compile</em> against a library, you need:</p><div class="ulist"><ul><li><p>API dependencies</p></li></ul></div></li><li><p>To <em>run</em>, you need:</p><div class="ulist"><ul><li><p>API+implementation+runtime only dependencies</p></li></ul></div></li></ul></div></section><section id="corollary"><h2>Corollary</h2><div class="paragraph"><p>All libraries published using Maven do it wrong</p></div></section><section id="published-metadata"><h2>Published metadata</h2><div class="ulist"><ul><li><p>Should be aimed at <em>consumers</em></p></li><li><p>It doesn&#8217;t matter what you need to compile</p></li><li><p>It matters what the <em>consumers</em> need</p></li><li><p>Published POM should be != producer POM</p></li></ul></div></section><section id="what-gradle-does"><h2>What Gradle does</h2><div class="ulist"><ul><li><p>Since 3.4, use the <code>java-library</code> plugin</p></li><li><p>Maps to <code>compile</code> and <code>runtime</code> scopes in <code>pom.xml</code></p></li><li><p>But it&#8217;s not enough&#8230;&#8203;</p></li></ul></div></section><section id="gradle-module-metadata"><h2>Gradle module metadata</h2><div class="ulist"><ul><li><p>Aimed at modeling properly <em>variants</em> of modules</p></li><li><p>Death to classifiers (mostly)</p></li><li><p>Model different set of dependencies</p></li><li><p>Multi-ecosystem (Java, Native, &#8230;&#8203;)</p></li></ul></div></section><section id="consequence"><h2>Consequence</h2><div class="ulist"><ul><li><p><code>all</code>/<code>fat</code> jars published with correct dependencies</p></li><li><p><code>guava-jdk5</code>, <code>guava-jdk7</code>, &#8230;&#8203; no longer need to be classifiers</p></li><li><p>attributes for matching variants</p></li></ul></div></section><section id="rich-version-constraints"><h2>Rich version constraints</h2></section><section id="meaning-of-versions"><h2>Meaning of versions</h2><div class="ulist"><ul><li><p>What does it mean to say: "I depend on 1.1"</p></li><li><p>Does it mean it doesn&#8217;t work using 1.0?</p></li><li><p>Implicit statement: "I should work with 1.1+"</p></li><li><p>What if it&#8217;s not true?</p></li></ul></div></section><section id="meaning-of-versions-2"><h2>Meaning of versions</h2><div class="ulist"><ul><li><p>Use <code>latest.release</code>?</p></li><li><p>Dependency on <code>1.2-beta-3</code>: is <code>beta</code> important?</p></li><li><p>Dependency on snapshots&#8230;&#8203;</p></li></ul></div></section><section id="custom-dependency-reasons"><h2>Custom dependency reasons</h2><div class="ulist"><ul><li><p>Explain <em>why</em> a dependency is here</p></li></ul></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="groovy language-groovy">dependencies {
+   implementation("com.google.guava:guava") {
+      version { prefer "23" }
+      because "required for immutable collections"
+   }
+}</code></pre></div></div></section><section id="custom-dependency-reasons-2"><h2>Custom dependency reasons</h2><div class="ulist"><ul><li><p>Shown in dependency insight (soon in build scans)</p></li></ul></div>
+<div class="paragraph"><p><code>gradle dependencyInsight --configuration compileClasspath --dependency guava</code></p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="text language-text">org:foo:com.google.guava:guava:23 (required for immutable collections)
+   variant "default" [
+      Requested attributes not found in the selected variant:
+         org.gradle.usage = java-api
+   ]</code></pre></div></div></section><section id="strict-versions"><h2>Strict versions</h2><div class="ulist"><ul><li><p>Dependency should be <strong>exactly</strong> this version, or <em>fail</em></p></li></ul></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="groovy language-groovy">dependencies {
+   api('com.acme:foo') {
+      version {
+         strictly '1.1'
+      }
+      because "Only version approved by QA"
+   }
+}</code></pre></div></div></section><section id="rejected-versions"><h2>Rejected versions</h2><div class="ulist"><ul><li><p>Dependency must not be <strong>exactly</strong> this version, or <em>fail</em></p></li></ul></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="groovy language-groovy">dependencies {
+   api('com.acme:foo') {
+      version {
+         prefer '[1.0, 2.0)'
+         reject '1.1'
+      }
+      because "Version 1.1 has a vulnerability"
+   }
+}</code></pre></div></div></section><section id="dependency-constraints"><h2>Dependency constraints</h2></section><section id="concept"><h2>Concept</h2><div class="ulist"><ul><li><p>Influence versions found in the graph, without adding hard dependencies</p></li><li><p>"If you use this module, use this version"</p></li></ul></div></section><section id="dependencymanagement"><h2>dependencyManagement</h2><div class="paragraph"><p>Similar to Maven&#8217;s <code>&lt;dependencyManagement&gt;</code> block but:</p></div>
+<div class="ulist"><ul><li><p>enforced transitively</p></li><li><p>published</p></li><li><p>consistent behavior</p></li></ul></div></section><section id="example-1-dependency-version-suggestion"><h2>Example 1: dependency version suggestion</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="groovy language-groovy">dependencies {
+    constraints {
+       api 'com.acme:foo:1.0'
+    }
+
+    // no need to put a version number
+    api 'com.acme:foo'
+}</code></pre></div></div></section><section id="example-2-influence-transitive-dependency-version"><h2>Example 2: influence transitive dependency version</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="groovy language-groovy">dependencies {
+    constraints {
+       // if 'bar' found transitively, use 1.1
+       api 'com.acme:bar:1.1'
+    }
+    // ...
+}</code></pre></div></div></section><section id="constraints-publication"><h2>Constraints publication</h2><div class="ulist"><ul><li><p>Published as constraints in Gradle metadata</p></li><li><p>Published as <code>&lt;dependencyManagement&gt;</code> in <code>pom.xml</code> (best effort)</p></li></ul></div></section><section id="component-metadata-rules-example-1"><h2>Component metadata rules: example 1</h2><div class="ulist"><ul><li><p>Downgrading a dependency</p></li></ul></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="kotlin language-kotlin">withModule(module) {
+   allVariants {
+      withDependencyConstraints {
+         filter { it.group == "org.apache.ivy" }.forEach {
+            version { prefer("2.2.0") }
+            because("Gradle depends on ivy implementation details which changed with newer versions")
+         }
+      }
+   }
+}</code></pre></div></div></section><section id="component-metadata-rules-example-2"><h2>Component metadata rules: example 2</h2><div class="ulist"><ul><li><p>Remove a dependency</p></li></ul></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="kotlin language-kotlin">withModule("org.eclipse.jgit:org.eclipse.jgit") {
+   allVariants {
+      withDependencies {
+         removeAll { it.group == "com.googlecode.javaewah" }
+      }
+   }
+}</code></pre></div></div></section><section id="further-features"><h2>Further features</h2><div class="ulist"><ul><li><p>Dependency locking</p></li><li><p>Support for platforms</p></li><li><p>BOM support</p></li></ul></div></section></section>
+<section id="thank-you"><h2>Thank you</h2><div class="ulist"><ul><li><p>Slides: <a href="https://wolfs.github.io/jugm-2018">wolfs.github.io/jugm-2018</a></p></li><li><p>Webinars</p></li><li><p><a href="https://www.youtube.com/channel/UCvClhveoEjokKIuBAsSjEwQ/videos">Youtube channel</a></p></li><li><p>Blog: <a href="https://gradle.org/blog" class="bare">https://gradle.org/blog</a></p></li><li><p>Gradle Enterprise: <a href="https://gradle.com" class="bare">https://gradle.com</a></p></li></ul></div></section></div></div><script src="reveal.js/lib/js/head.min.js"></script><script src="reveal.js/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
+Reveal.initialize({
+  // Display controls in the bottom right corner
+  controls: true,
+  // Display a presentation progress bar
+  progress: true,
+  // Display the page number of the current slide
+  slideNumber: true,
+  // Push each slide change to the browser history
+  history: true,
+  // Enable keyboard shortcuts for navigation
+  keyboard: true,
+  // Enable the slide overview mode
+  overview: true,
+  // Vertical centering of slides
+  center: true,
+  // Enables touch navigation on devices with touch input
+  touch: true,
+  // Loop the presentation
+  loop: false,
+  // Change the presentation direction to be RTL
+  rtl: false,
+  // Turns fragments on and off globally
+  fragments: true,
+  // Flags if the presentation is running in an embedded mode,
+  // i.e. contained within a limited portion of the screen
+  embedded: false,
+  // Number of milliseconds between automatically proceeding to the
+  // next slide, disabled when set to 0, this value can be overwritten
+  // by using a data-autoslide attribute on your slides
+  autoSlide: 0,
+  // Stop auto-sliding after user input
+  autoSlideStoppable: true,
+  // Enable slide navigation via mouse wheel
+  mouseWheel: false,
+  // Hides the address bar on mobile devices
+  hideAddressBar: true,
+  // Opens links in an iframe preview overlay
+  previewLinks: false,
+  // Theme (e.g., beige, black, league, night, serif, simple, sky, solarized, white)
+  // NOTE setting the theme in the config no longer works in reveal.js 3.x
+  //theme: Reveal.getQueryHash().theme || 'gradle',
+  // Transition style (e.g., none, fade, slide, convex, concave, zoom)
+  transition: Reveal.getQueryHash().transition || 'linear',
+  // Transition speed (e.g., default, fast, slow)
+  transitionSpeed: 'default',
+  // Transition style for full page slide backgrounds (e.g., none, fade, slide, convex, concave, zoom)
+  backgroundTransition: 'fade',
+  // Number of slides away from the current that are visible
+  viewDistance: 3,
+  // Parallax background image (e.g., "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'")
+  parallaxBackgroundImage: '',
+  // Parallax background size in CSS syntax (e.g., "2100px 900px")
+  parallaxBackgroundSize: '',
+
+  // The "normal" size of the presentation, aspect ratio will be preserved
+  // when the presentation is scaled to fit different resolutions. Can be
+  // specified using percentage units.
+  width: 960,
+  height: 700,
+
+  // Factor of the display size that should remain empty around the content
+  margin: 0.1,
+
+  // Bounds for smallest/largest possible scale to apply to content
+  minScale: 0.2,
+  maxScale: 1.5,
+
+  // Optional libraries used to extend on reveal.js
+  dependencies: [
+      { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      { src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+  ]
+});</script><div id="footer">
+  <div style="width:100%">
+     <div style="display:inline">Extreme developer productivity with Gradle 4.0 - @gradle</div>
+     <div style="display:inline; position:absolute; right: 50px;"><img src="images/gradle-logo-min.png"></div>
+  </div>
+</div></body></html>
